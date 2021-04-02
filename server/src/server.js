@@ -5,6 +5,7 @@ const cors = require("cors"); //added
 const app = express();
 app.use(cors()); //added
 app.use(express.json()); //added
+require("dotenv").config();
 
 
 const Data = require("./data.js");

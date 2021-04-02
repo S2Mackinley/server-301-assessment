@@ -1,5 +1,8 @@
 "use strict";
 
+const { response } = require('express');
+
+const Item = require('./item-model.js');
 const DataModel = require("./item-model.js");
 
 const Data = {};
@@ -7,7 +10,7 @@ const Data = {};
 Data.addAnItem = async (req, res, next) => {
   try {
     const data = req.body;
-    const items = new DataModel(data);
+    const item = new DataModel(data);
     await item.save();//added save item
     res.status(200).json(item); // 404 to 200
   } catch (e) {
@@ -28,26 +31,28 @@ Data.getOneItem = async (req, res) => {
 
 //added
 Data.deleteOneItem = async (req, res) => {
-  const index = parseInt(req.params.index);
-  const items = req.query.item;
+  try {
+    const id = req.params.id;
+    await DataModel.deleteOne({ _id: id });
+    res.status(200).json("successfully deleted");
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-  await Item.findOne({_id:id}, (err, entry) => {
-    const newItemArr = entry.items.filter((item, i) => {
-      return i !== index;
-    })
-    entry.items = newItemArr;
-    entry.save();
-    res.status(200).send('successfully deleted!');
-  })
-}
 Data.updateOneItem = async (req, res) => {
-  const id = req.params.id; //s needed
-  const data = req.body;
-  const item = await DataModel.findByIdAndUpdate(id, data, {
-    new: true,
-    useFindAndModify: false,
-  });
-  res.status(200).json(item);
+  try {
+    const id = req.params.id;//added
+    const data = req.body;
+    const item = await DataModel.findByIdAndUpdate(id, data, {
+      new: true,
+      useFindAndModify: false,
+    });
+    console.log("from updateOneItem", id, data);
+    res.status(200).json(item);
+  } catch (err) {
+    console.error(err);//added
+  }
 };
 
 module.exports = Data;

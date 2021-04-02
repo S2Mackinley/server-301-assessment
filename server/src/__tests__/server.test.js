@@ -1,37 +1,32 @@
-'use strict';
+"use strict";
 
-const supergoose = require('@code-fellows/supergoose');
-const app = require('../server.js');
+const supergoose = require("@code-fellows/supergoose");
+const app = require("../server.js");
 
 const client = supergoose(app.server);
 
-describe('The Server', () => {
-
+describe("The Server", () => {
   async function createRecord() {
-
     const data = {
-      name: 'foo',
-      description: 'bar',
+      name: "foo",
+      description: "bar",
     };
 
-    const response = await client.post('/items').send(data);
+    const response = await client.post("/items").send(data);
 
     expect(response.status).toEqual(200);
 
     return response.body;
   }
 
-  it('can create a record', async () => {
-
+  it("can create a record", async () => {
     const record = await createRecord();
     expect(record._id).not.toBeNull();
     expect(record.name).not.toBeNull();
     expect(record.description).not.toBeNull();
-
   });
 
-  it('can get a single record', async () => {
-
+  it("can get a single record", async () => {
     const record = await createRecord();
 
     const id = record._id;
@@ -43,13 +38,12 @@ describe('The Server', () => {
     expect(response.body.description).toEqual(record.description);
   });
 
-  it('can update a record', async () => {
-
+  it("can update a record", async () => {
     const record = await createRecord();
     const id = record._id;
 
     const newValues = {
-      name: 'newName',
+      name: "newName",
     };
 
     const response = await client.put(`/items/${id}`).send(newValues);
@@ -59,8 +53,7 @@ describe('The Server', () => {
     expect(response.body.description).toEqual(record.description);
   });
 
-  it('can delete a record', async () => {
-
+  it("can delete a record", async () => {
     const record = await createRecord();
     const id = record._id;
 
@@ -71,8 +64,7 @@ describe('The Server', () => {
     expect(getResponse.body._id).toBeUndefined();
   });
 
-  it('can get all records', async () => {
-
+  it("can get all records", async () => {
     for (let i = 1; i <= 5; i++) {
       await createRecord();
     }
@@ -84,15 +76,14 @@ describe('The Server', () => {
     expect(items.length).toBeGreaterThan(1);
   });
 
-  it('properly sends a 404 on an unknown route', async () => {
-    const response = await client.get('/nothing');
+  it("properly sends a 404 on an unknown route", async () => {
+    const response = await client.get("/nothing");
     expect(response.status).toBe(404);
   });
 
-  it('properly sends a 500 when an error occurs', async () => {
+  it("properly sends a 500 when an error occurs", async () => {
     const data = {};
-    const response = await client.post('/items').send(data);
+    const response = await client.post("/items").send(data);
     expect(response.status).toBe(500);
   });
-
 });

@@ -6,13 +6,12 @@ const app = express();
 app.use(cors()); //added
 app.use(express.json()); //added
 
-const PORT = process.env.PORT;
-const Data = require("./data.js");
 
+const Data = require("./data.js");
 
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/items", Data.getAllItems);//added data
+app.get("/items", Data.getAllItems); //added data
 app.get("/items/:id", Data.getOneItem);
 app.delete("/items/:id", Data.deleteOneItem);
 app.post("/items", Data.addAnItem);
@@ -30,7 +29,7 @@ app.get("/", (req, res) => {
   res.send("proof of life");
 });
 
-app.listen(PORT, () => console.log(`i hope the server is up on ${PORT}`));
+
 
 module.exports = {
   server: app,

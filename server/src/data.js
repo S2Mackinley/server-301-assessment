@@ -37,7 +37,7 @@ Data.deleteOneItem = async (req, res) => {
     })
     entry.items = newItemArr;
     entry.save();
-    response.status(200).send('successfully deleted!');
+    res.status(200).send('successfully deleted!');
   })
 }
 Data.updateOneItem = async (req, res) => {

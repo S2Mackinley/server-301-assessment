@@ -30,8 +30,6 @@ app.get("/", (req, res) => {
   res.send("proof of life");
 });
 
-
-
 module.exports = {
   server: app,
   start: (port) => {
